@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dos Años Juntos - Nuestra Historia de Amor</title>
     <link rel="stylesheet" href="PaginaAño/amorcitoMain.css">
     <link rel="icon" href=paginaAño/fotosAmadaMia/Corazon_paginaAño.png type="image/x-icon">
     <script src="PaginaAño/amorcitoMain.js" defer></script>
+    <script src="script.js"></script>
+    <link href="https://vjs.zencdn.net/8.23.4/video-js.min.css" rel="stylesheet">
+<script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
 </head>
 <body>
  <!-- Indicador de progreso de scroll -->
@@ -17,10 +20,10 @@
         <nav class="barra-navegacion">
             <div class="marca-navegacion">
                 <!-- EDITAR: Cambia aquí el título principal -->
-                <h1 onclick="scrollToTop()">Nuestros Dos Años 💖</h1>
+                <h1 onclick="scrollToTop()">Thogeder💖</h1>
             </div>
             <ul class="menu-navegacion" id="menuNavegacion">
-                <!-- EDITAR: Puedes cambiar los nombres de las secciones aquí -->
+            
                 <li><a href="#inicio" class="enlace-navegacion">🏠</a></li>
                 <li><a href="#historia" class="enlace-navegacion">📖</a></li>
                 <li><a href="#momentos" class="enlace-navegacion">✨</a></li>
@@ -28,6 +31,7 @@
                 <li><a href="#timeline" class="enlace-navegacion">⏰</a></li>
                 <li><a href="#cartas" class="enlace-navegacion">💌</a></li>
                 <li><a href="#planes" class="enlace-navegacion">🌟</a></li>
+                <li><a src="favorito.html"></a>❤️</li>
             </ul>
             <div class="menu-hamburguesa" id="menuHamburguesa">
                 <span></span>
@@ -44,7 +48,7 @@
                 <h2 class="titulo-aniversario">Celebrando Dos Años de Amor</h2>
                 <p class="fecha-aniversario">Desde el 19 de septiembre de 2023 hasta hoy</p>
                 <div class="contador-amor">
-                    <span id="contador-dias">730</span>
+                    <span id="contador-dias"></span>
                     <span>días juntos</span>
                 </div>
                  <img class="imagen-representativa" src="PaginaAño/fotosAmadaMia/fotoPrincipal.jpg" alt="TE AMO FLACA" height="300" width="200">   
@@ -72,13 +76,16 @@
                     </div>
                     
                     <div class="capitulo-historia">
+                        <button class="favorito">💖</button>
                         <h3>Los Primeros Días</h3>
                         <p class="texto-historia">
-                            Describe esos primeros días de conocerse, las primeras conversaciones, las primeras citas...
+                            Ay Dios mio como no olvidar los primeros dias wow, ya hace mas de dos años empezamos a hablar y ahora miranos aqui juntos 
+                            
                         </p>
                     </div>
                     
                     <div class="capitulo-historia">
+                        <button class="favorito">💖</button>
                         <h3>Cuando Supimos que Era Especial</h3>
                         <p class="texto-historia">
                             Ese momento en que ambos se dieron cuenta de que había algo único y especial entre ustedes...
@@ -86,6 +93,7 @@
                     </div>
                     
                     <div class="capitulo-historia">
+                        <button class="favorito">💖</button>
                         <h3>Creciendo Juntos</h3>
                         <p class="texto-historia">
                             Cómo han crecido como pareja, los retos superados, los momentos de felicidad compartidos...
@@ -93,6 +101,7 @@
                     </div>
                     
                     <div class="capitulo-historia">
+                        <button class="favorito">💖</button>
                         <h3>El Presente</h3>
                         <p class="texto-historia">
                             Dónde están ahora, qué significa esta relación para ambos, cómo se sienten después de dos años...
@@ -107,6 +116,7 @@
                 <h2 class="titulo-seccion">Momentos Especiales</h2>
                 <div class="cuadricula-momentos">
                     <div class="tarjeta-momento">
+                        <button class="favorito">💖</button>
                         <h3>Primera Cita</h3>
                         <p>no se si cuente como primera cita las veces que te acompalaba a musica o cuando fuiste a mi cumple pero definitivamente
                             la primera primera fue el dia que te lleve a comer sanchipapa, se que fue mientras ya estabamos juntos
@@ -114,14 +124,17 @@
                         </p>
                     </div>
                     <div class="tarjeta-momento">
+                        <button class="favorito">💖</button>
                         <h3>Primer "Te Amo"</h3>
                         <p>Descripción del momento...</p>
                     </div>
                     <div class="tarjeta-momento">
+                        <button class="favorito">💖</button>
                         <h3>Primer Viaje Juntos</h3>
                         <p>Descripción del momento...</p>
                     </div>
                     <div class="tarjeta-momento">
+                        <button class="favorito">💖</button>
                         <h3>Primer Aniversario</h3>
                         <p>Descripción del momento...</p>
                     </div>
@@ -134,33 +147,55 @@
                 <h2 class="titulo-seccion">Nuestra Galería</h2>
                 <div class="cuadricula-fotos">
                     <div class="elemento-foto">
+                        <button class="favorito">💖</button>
                         <img src="PaginaAño/fotosAmadaMia/foto1.jpg" alt="Foto1" class="foto-galeria" >
                                             </div>
                     <div class="elemento-foto">
+                        <button class="favorito">💖</button>
                         <img src="PaginaAño/fotosAmadaMia/foto2.jpg" alt="Foto 2" class="foto-galeria">
                        
                     </div>
                 <div class="elemento-foto">
+                    <button class="favorito">💖</button>
                         <img src="PaginaAño/fotosAmadaMia/foto3.jpg" alt="Foto 3" class="foto-galeria">
                         
                     </div>
                     <div class="elemento-foto">
+                        <button class="favorito">💖</button>
                         <img src="PaginaAño/fotosAmadaMia/foto4.jpg" alt="Foto 4" class="foto-galeria">
                         
                     </div>
                     <div class ="elemento-foto">
-                        <video src="PaginaAño/fotosAmadaMia/barbie.mp4" controls class="foto-galeria"></video>
+                        <button class="favorito">💖</button>
+                        <video src="PaginaAño/fotosAmadaMia/barbie.mp4" controls class="video-galeria"></video>
                     </div>
                     <div class ="elemento-foto">
-                        <video src="PaginaAño/fotosAmadaMia/RockThatBodyAmorcito.mp4" controls class="foto-galeria"></video>
+                        <button class="favorito">💖</button>
+                        <video src="PaginaAño/fotosAmadaMia/RockThatBodyAmorcito.mp4" controls class="video-galeria"></video>
                     </div>
                     <div class ="elemento-foto">
-                        <video src="PaginaAño/fotosAmadaMia/RockThatbodyYO.mp4" controls class="foto-galeria"></video>
+                        <button class="favorito">💖</button>
+                        <video src="PaginaAño/fotosAmadaMia/RockThatbodyYO.mp4" controls class="video-galeria"></video>
                     </div>
                     <div class ="elemento-foto">
+                        <button class="favorito">💖</button>
                         <img src="PaginaAño/fotosAmadaMia/cumple flaca.jpg" class="foto-galeria"></img>
                     </div>
                     <div class="elemento-foto">
+                        <button class="favorito">💖</button>
+                        <img src="PaginaAño/fotosAmadaMia/carmen.jpg" alt="carmen" class="foto-galeria">
+                        </div>
+                                            <div class="elemento-foto">
+                        <button class="favorito">💖</button>
+                        <video src="PaginaAño/fotosAmadaMia/emmoji pop.mp4" alt="carmen" controls class="video-galeria"></video>
+                        </div>
+                                            <div class="elemento-foto">
+                        <button class="favorito">💖</button>
+                        <img src="PaginaAño/fotosAmadaMia/carmen.jpg" alt="carmen" class="foto-galeria">
+                        </div>
+
+                                            <div class="elemento-foto">
+                        <button class="favorito">💖</button>
                         <img src="PaginaAño/fotosAmadaMia/carmen.jpg" alt="carmen" class="foto-galeria">
                         </div>
 
@@ -234,7 +269,10 @@
     <!-- Botón para volver arriba -->
     <button class="boton-arriba" id="botonArriba" onclick="scrollToTop()">↑</button>
 
-    <script src="script.js"></script>
+
+    <script>
+        var reproductor = videojs('video-galeria')
+    </script>
 </body>
 
 </html>
