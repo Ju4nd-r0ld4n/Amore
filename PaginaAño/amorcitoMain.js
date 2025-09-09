@@ -1,4 +1,4 @@
-/* ==== JAVASCRIPT PARA EL MENÚ INTERACTIVO Y REPRODUCTOR DE MÚSICA ==== */
+
 
 // ==========================================
 // CONFIGURACIÓN - EDITA AQUÍ LOS AJUSTES
@@ -253,4 +253,30 @@ volumenControl.addEventListener('input', () => {
 // Cargar la primera canción al iniciar
 window.addEventListener('load', () => {
     cargarCancion(cancionActiva);
+});
+// ==========================================
+// CONTADOR DE DÍAS - AGREGAR ESTE BLOQUE
+// ==========================================
+
+// Función para calcular días transcurridos
+function calcularDiasJuntos() {
+    const fechaInicio = new Date('2023-09-19'); // Tu fecha de aniversario
+    const fechaActual = new Date();
+    const diferencia = fechaActual - fechaInicio;
+    const milisegundosPorDia = 1000 * 60 * 60 * 24;
+    const diasTranscurridos = Math.floor(diferencia / milisegundosPorDia);
+    return diasTranscurridos;
+}
+
+// Función para actualizar el contador en el HTML
+function actualizarContadorDias() {
+    const contadorElement = document.getElementById('contador-dias');
+    const dias = calcularDiasJuntos();
+    contadorElement.textContent = dias;
+}
+
+// Inicializar el contador cuando cargue la página
+window.addEventListener('load', () => {
+    actualizarContadorDias();
+    setInterval(actualizarContadorDias, 3600000);
 });
