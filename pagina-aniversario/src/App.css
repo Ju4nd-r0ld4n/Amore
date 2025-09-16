@@ -658,7 +658,7 @@ footer {
     border-radius: 3px;
     outline: none;
     cursor: pointer;
-    -webkit-appearance: none;
+   
 }
 
 .barra-progreso-custom::-webkit-slider-thumb, .barra-volumen::-webkit-slider-thumb {
