@@ -1,5 +1,275 @@
-import React, { useState, useEffect } from 'react';
-import './App.css'; // Aquí importas el CSS que te creé
+import React, { useState, useEffect, useRef } from 'react';
+import './App.css';
+
+// Componente MusicPlayer
+const MusicPlayer = () => {
+  const [playlist, setPlaylist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentSong, setCurrentSong] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const audioRef = useRef(null);
+
+  // Cargar playlist desde JSON
+  useEffect(() => {
+    const cargarPlaylist = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(process.env.PUBLIC_URL + '/playlist.json');
+        
+        if (!response.ok) {
+          throw new Error('Error al cargar la playlist');
+        }
+        
+        const data = await response.json();
+        setPlaylist(data.canciones);
+        setError(null);
+      } catch (err) {
+        console.error('Error cargando playlist:', err);
+        setError('No se pudo cargar la música');
+        // Playlist de respaldo
+        setPlaylist([
+          {
+            id: 1,
+            title: "Música no disponible",
+            artist: "Error de carga",
+            src: "",
+            duration: "0:00"
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarPlaylist();
+  }, []);
+
+  useEffect(() => {
+    if (playlist.length === 0) return;
+    
+    const audio = audioRef.current;
+    
+    const setAudioData = () => {
+      setDuration(audio.duration);
+      setCurrentTime(audio.currentTime);
+    };
+    
+    const setAudioTime = () => setCurrentTime(audio.currentTime);
+    
+    if (audio) {
+      audio.addEventListener('loadeddata', setAudioData);
+      audio.addEventListener('timeupdate', setAudioTime);
+      
+      return () => {
+        audio.removeEventListener('loadeddata', setAudioData);
+        audio.removeEventListener('timeupdate', setAudioTime);
+      };
+    }
+  }, [currentSong, playlist]);
+
+  const togglePlayPause = () => {
+    if (playlist.length === 0) return;
+    
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(err => {
+        console.error('Error reproduciendo audio:', err);
+        setError('Error al reproducir la canción');
+      });
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const nextSong = () => {
+    if (playlist.length === 0) return;
+    setCurrentSong((prev) => (prev + 1) % playlist.length);
+    setIsPlaying(true);
+  };
+
+  const prevSong = () => {
+    if (playlist.length === 0) return;
+    setCurrentSong((prev) => (prev - 1 + playlist.length) % playlist.length);
+    setIsPlaying(true);
+  };
+
+  const handleProgressChange = (e) => {
+    if (playlist.length === 0) return;
+    
+    const audio = audioRef.current;
+    const newTime = (e.target.value / 100) * duration;
+    audio.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value / 100;
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+  };
+
+  const formatTime = (time) => {
+    if (isNaN(time)) return '0:00';
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const selectSong = (index) => {
+    if (playlist.length === 0) return;
+    setCurrentSong(index);
+    setIsPlaying(true);
+  };
+
+  useEffect(() => {
+    if (isPlaying && audioRef.current && playlist.length > 0) {
+      audioRef.current.play().catch(err => {
+        console.error('Error auto-reproduciendo:', err);
+        setIsPlaying(false);
+      });
+    }
+  }, [currentSong, isPlaying, playlist]);
+
+  // Estado de carga
+  if (loading) {
+    return (
+      <div className="reproductor-principal">
+        <div className="loading-music">
+          <div className="disco-cargando">🎵</div>
+          <p>Cargando nuestra música...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Estado de error
+  if (error && playlist.length === 0) {
+    return (
+      <div className="reproductor-principal">
+        <div className="error-music">
+          <p>❌ {error}</p>
+          <button onClick={() => window.location.reload()}>Intentar de nuevo</button>
+        </div>
+      </div>
+    );
+  }
+
+  const cancionActual = playlist[currentSong];
+
+  return (
+    <div className="reproductor-principal">
+      {playlist.length > 0 && (
+        <>
+          <audio
+            ref={audioRef}
+            src={process.env.PUBLIC_URL + cancionActual.src}
+            onEnded={nextSong}
+            preload="metadata"
+          />
+          
+          {/* Canción actual */}
+        <div className="cancion-actual">
+        <div className="imagen-disco">
+    {cancionActual.image ? (
+      <img 
+        src={process.env.PUBLIC_URL + cancionActual.image} 
+        alt={`Portada de ${cancionActual.title}`}
+        className="imagen-album"
+        onError={(e) => {
+          e.target.style.display = 'none';
+          e.target.nextSibling.style.display = 'flex';
+        }}
+      />
+    ) : null}
+    <div className="disco-vinilo" style={{ display: cancionActual.image ? 'none' : 'flex' }}>
+      🎵
+    </div>
+  </div>
+  <div className="info-cancion">
+    <h3>{cancionActual.title}</h3>
+    <p>{cancionActual.artist}</p>
+    {cancionActual.descripcion && (
+      <p className="descripcion-cancion">{cancionActual.descripcion}</p>
+    )}
+  </div>
+</div>
+
+          {/* Controles */}
+          <div className="controles-principales">
+            <button onClick={prevSong} className="btn-control" title="Anterior">⏮️</button>
+            <button onClick={togglePlayPause} className="btn-play" title={isPlaying ? 'Pausar' : 'Reproducir'}>
+              {isPlaying ? '⏸️' : '▶️'}
+            </button>
+            <button onClick={nextSong} className="btn-control" title="Siguiente">⏭️</button>
+          </div>
+
+          {/* Barra de progreso */}
+          <div className="progreso-container">
+            <span className="tiempo">{formatTime(currentTime)}</span>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={duration ? (currentTime / duration) * 100 : 0}
+              onChange={handleProgressChange}
+              className="barra-progreso-custom"
+              title="Progreso de la canción"
+            />
+            <span className="tiempo">{formatTime(duration)}</span>
+          </div>
+
+          {/* Control de volumen */}
+          <div className="volumen-container">
+            <span>🔊</span>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={volume * 100}
+              onChange={handleVolumeChange}
+              className="barra-volumen"
+              title="Control de volumen"
+            />
+          </div>
+
+          {/* Lista de canciones */}
+          <div className="lista-canciones">
+            {playlist.map((song, index) => (
+              <div
+                key={song.id}
+                onClick={() => selectSong(index)}
+                className={`item-cancion ${index === currentSong ? 'activa' : ''}`}
+                title={song.descripcion || `Reproducir ${song.title}`}
+              >
+                <span className="numero-cancion">{index + 1}</span>
+                <div className="info-item">
+                  <p className="titulo-item">{song.title}</p>
+                  <p className="artista-item">{song.artist}</p>
+                  {song.album && <p className="album-item">{song.album}</p>}
+                </div>
+                <span className="duracion-item">{song.duration}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Mostrar error si existe pero hay canciones cargadas */}
+          {error && (
+            <div className="error-mensaje">
+              <small>⚠️ {error}</small>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
 
 function App() {
   // Estados para el menú y navegación
@@ -88,10 +358,11 @@ function App() {
             <li><a href="#historia" onClick={(e) => {e.preventDefault(); scrollSuave('historia')}}>📖</a></li>
             <li><a href="#momentos" onClick={(e) => {e.preventDefault(); scrollSuave('momentos')}}>✨</a></li>
             <li><a href="#galeria" onClick={(e) => {e.preventDefault(); scrollSuave('galeria')}}>📸</a></li>
+            <li><a href='#reproductor' onClick={(e)=>{e.preventDefault();scrollSuave('reproductor')}}>🔈</a></li>
             <li><a href="#timeline" onClick={(e) => {e.preventDefault(); scrollSuave('timeline')}}>⏰</a></li>
             <li><a href="#cartas" onClick={(e) => {e.preventDefault(); scrollSuave('cartas')}}>💌</a></li>
             <li><a href="#planes" onClick={(e) => {e.preventDefault(); scrollSuave('planes')}}>🌟</a></li>
-            <li><span>❤️</span></li>
+            
           </ul>
           
           <div 
@@ -226,7 +497,10 @@ function App() {
                     alt={`Foto ${num}`} 
                     className="foto-galeria" 
                   />
-                  <button className="favorito">💖</button>
+                  <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
+                  
                 </div>
               ))}
               
@@ -236,7 +510,9 @@ function App() {
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
@@ -245,7 +521,9 @@ function App() {
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
@@ -254,16 +532,21 @@ function App() {
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
                 <img 
-                  src={process.env.PUBLIC_URL + "/images/cumple_flaca.jpg"} 
+                  src={process.env.PUBLIC_URL + "/images/cumple flaca.jpg"} 
                   className="foto-galeria" 
                   alt="Cumpleaños" 
                 />
-                <button className="favorito">💖</button>
+                
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
@@ -272,21 +555,33 @@ function App() {
                   alt="Carmen" 
                   className="foto-galeria" 
                 />
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
                 <video 
-                  src={process.env.PUBLIC_URL + "/video/emmoji_pop.mp4"} 
+                  src={process.env.PUBLIC_URL + "/video/emmoji pop.mp4"} 
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Sección Reproductor de Música */}
+        <section id="reproductor" className="seccion-musica">
+          <div className="contenedor">
+            <h2 className="titulo-seccion">Nuestra Música</h2>
+            <MusicPlayer />
+          </div>
+        </section>
+        
         {/* Timeline */}
         <section id="timeline" className="seccion-linea-tiempo">
           <div className="contenedor">
