@@ -88,10 +88,11 @@ function App() {
             <li><a href="#historia" onClick={(e) => {e.preventDefault(); scrollSuave('historia')}}>📖</a></li>
             <li><a href="#momentos" onClick={(e) => {e.preventDefault(); scrollSuave('momentos')}}>✨</a></li>
             <li><a href="#galeria" onClick={(e) => {e.preventDefault(); scrollSuave('galeria')}}>📸</a></li>
+            <li><a href='#reproductor' onClick={(e)=>{e.preventDefault();scrollSuave('reproductor')}}>🔈</a></li>
             <li><a href="#timeline" onClick={(e) => {e.preventDefault(); scrollSuave('timeline')}}>⏰</a></li>
             <li><a href="#cartas" onClick={(e) => {e.preventDefault(); scrollSuave('cartas')}}>💌</a></li>
             <li><a href="#planes" onClick={(e) => {e.preventDefault(); scrollSuave('planes')}}>🌟</a></li>
-            <li><span>❤️</span></li>
+            
           </ul>
           
           <div 
@@ -226,7 +227,10 @@ function App() {
                     alt={`Foto ${num}`} 
                     className="foto-galeria" 
                   />
-                  <button className="favorito">💖</button>
+                  <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
+                  
                 </div>
               ))}
               
@@ -236,7 +240,9 @@ function App() {
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
@@ -245,7 +251,9 @@ function App() {
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
@@ -254,16 +262,21 @@ function App() {
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
                 <img 
-                  src={process.env.PUBLIC_URL + "/images/cumple_flaca.jpg"} 
+                  src={process.env.PUBLIC_URL + "/images/cumple flaca.jpg"} 
                   className="foto-galeria" 
                   alt="Cumpleaños" 
                 />
-                <button className="favorito">💖</button>
+                
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
@@ -272,21 +285,25 @@ function App() {
                   alt="Carmen" 
                   className="foto-galeria" 
                 />
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
               
               <div className="elemento-foto">
                 <video 
-                  src={process.env.PUBLIC_URL + "/video/emmoji_pop.mp4"} 
+                  src={process.env.PUBLIC_URL + "/video/emmoji pop.mp4"} 
                   controls 
                   className="video-galeria"
                 ></video>
-                <button className="favorito">💖</button>
+                <button className="favorito"><span>💖</span>
+                    <span>Agregar a favorito</span>
+                  </button>
               </div>
             </div>
           </div>
         </section>
-
+        
         {/* Timeline */}
         <section id="timeline" className="seccion-linea-tiempo">
           <div className="contenedor">
